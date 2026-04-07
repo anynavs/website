@@ -4,7 +4,9 @@
  */
 
 import { existsSync, mkdirSync, cpSync } from "node:fs";
+import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 // ── 类型定义 ──────────────────────────────────────────────
 
@@ -389,7 +391,7 @@ function aboutPageHtml(config: Config, categories: Category[], svgSprite: string
         <div class="surface-low-bg bg-surface-container-low rounded-2xl p-8 border border-subtle border-outline-variant/10">
             <h2 class="text-main text-lg font-bold text-on-surface mb-4">技术栈</h2>
             <ul class="space-y-2 text-sub text-on-surface-variant text-sm">
-                <li class="flex items-center gap-2"><svg class="icon w-4 h-4 text-primary"><use href="#i-code"/></svg> 使用 Bun 构建，纯静态 HTML 生成</li>
+                <li class="flex items-center gap-2"><svg class="icon w-4 h-4 text-primary"><use href="#i-code"/></svg> 使用 Node.js 构建，纯静态 HTML 生成</li>
                 <li class="flex items-center gap-2"><svg class="icon w-4 h-4 text-primary"><use href="#i-palette"/></svg> Tailwind CSS + SVG 图标</li>
                 <li class="flex items-center gap-2"><svg class="icon w-4 h-4 text-primary"><use href="#i-shield"/></svg> 安全跳转中间页，保护用户隐私</li>
                 <li class="flex items-center gap-2"><svg class="icon w-4 h-4 text-primary"><use href="#i-search"/></svg> 前端实时搜索，支持按名称和描述过滤</li>
@@ -464,20 +466,25 @@ function replacePlaceholders(
 // ── 主函数 ────────────────────────────────────────────────
 
 async function main() {
-  const root = import.meta.dir;
+  const root = fileURLToPath(new URL(".", import.meta.url));
 
   // 读取数据
-  const config = (await Bun.file(join(root, "config.json")).json()) as Config;
-  const categories = (await Bun.file(join(root, "links.json")).json()) as Category[];
+  const config = JSON.parse(
+    await readFile(join(root, "config.json"), "utf-8")
+  ) as Config;
+  const categories = JSON.parse(
+    await readFile(join(root, "links.json"), "utf-8")
+  ) as Category[];
 
   // 读取 SVG sprite
-  const svgSprite = await Bun.file(join(root, "template", "icons.svg")).text();
+  const svgSprite = await readFile(join(root, "template", "icons.svg"), "utf-8");
 
   // 读取模板
-  const homeTemplate = await Bun.file(join(root, "template", "home.html")).text();
-  const redirectTemplate = await Bun.file(
-    join(root, "template", "redirect.html")
-  ).text();
+  const homeTemplate = await readFile(join(root, "template", "home.html"), "utf-8");
+  const redirectTemplate = await readFile(
+    join(root, "template", "redirect.html"),
+    "utf-8"
+  );
 
   // 生成分类 HTML
   const categoriesHtml = categories
@@ -516,9 +523,9 @@ async function main() {
     mkdirSync(distDir, { recursive: true });
   }
 
-  await Bun.write(join(distDir, "index.html"), homeHtml);
-  await Bun.write(join(distDir, "redirect.html"), redirectHtml);
-  await Bun.write(join(distDir, "about.html"), aboutHtml);
+  await writeFile(join(distDir, "index.html"), homeHtml, "utf-8");
+  await writeFile(join(distDir, "redirect.html"), redirectHtml, "utf-8");
+  await writeFile(join(distDir, "about.html"), aboutHtml, "utf-8");
 
   const faviconSrc = join(root, "favicon.ico");
   if (existsSync(faviconSrc)) {

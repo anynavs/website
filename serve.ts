@@ -1,23 +1,47 @@
-import { join } from "node:path";
+/**
+ * 本地预览 dist/（先 npm run build）
+ */
+import { createServer } from "node:http";
+import { readFile } from "node:fs/promises";
+import { extname, relative, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const dist = join(import.meta.dir, "dist");
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
+const dist = resolve(__dirname, "dist");
 
-const server = Bun.serve({
-  port: 3366,
-  async fetch(req) {
-    const url = new URL(req.url);
-    const path = url.pathname === "/" ? "/index.html" : url.pathname;
-    const file = Bun.file(join(dist, path));
+const MIME: Record<string, string> = {
+  ".html": "text/html; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".ico": "image/x-icon",
+  ".png": "image/png",
+  ".svg": "image/svg+xml",
+};
 
-    if (await file.exists()) {
-      return new Response(file);
-    }
-    return new Response("Not Found", { status: 404 });
-  },
-  development: {
-    hmr: true,
-    console: true,
-  },
+createServer(async (req, res) => {
+  const url = new URL(req.url ?? "/", "http://127.0.0.1");
+  const pathname = url.pathname === "/" ? "/index.html" : url.pathname;
+  const rel = pathname.replace(/^\/+/, "") || "index.html";
+  if (rel.includes("..")) {
+    res.writeHead(403);
+    res.end();
+    return;
+  }
+  const filePath = resolve(dist, rel);
+  if (relative(dist, filePath).startsWith("..")) {
+    res.writeHead(403);
+    res.end();
+    return;
+  }
+  try {
+    const buf = await readFile(filePath);
+    const ext = extname(filePath);
+    res.setHeader("Content-Type", MIME[ext] ?? "application/octet-stream");
+    res.end(buf);
+  } catch {
+    res.writeHead(404);
+    res.end("Not Found");
+  }
+}).listen(3366, () => {
+  console.log("http://localhost:3366");
 });
-
-console.log(`Server running at ${server.url}`);

@@ -4,7 +4,7 @@
 
 **在线站点（GitHub Pages）：** [https://anynavs.github.io/website/](https://anynavs.github.io/website/)
 
-用 [Bun](https://bun.sh) 写的**静态导航站生成器**：读 `config.json` 与 `links.json`，套 `template/` 里的 HTML，输出到 `dist/`，可直接丢到任意静态托管（GitHub Pages、Cloudflare Pages、Nginx 等）。
+用 **Node.js** 写的**静态导航站生成器**：读 `config.json` 与 `links.json`，套 `template/` 里的 HTML，输出到 `dist/`，可直接丢到任意静态托管（GitHub Pages、Cloudflare Pages、Nginx 等）。
 
 ## 功能概览
 
@@ -15,14 +15,14 @@
 
 ## 前置条件
 
-- [Bun](https://bun.sh)（建议最新稳定版）
+- [Node.js](https://nodejs.org/) 20+（建议 LTS）
 
 ## 常用命令
 
 ```bash
-bun install
-bun run build    # 执行 index.ts，生成 dist/
-bun run dev      # 本地起静态服务，默认 http://localhost:3366 ，读 dist/（改模板/数据后需先 build）
+npm install
+npm run build    # 执行 index.ts，生成 dist/
+npm run dev        # 先 build 再起静态服务，默认 http://localhost:3366 ，读 dist/（改模板/数据后需再 build）
 ```
 
 ## 配置
@@ -64,14 +64,15 @@ bun run dev      # 本地起静态服务，默认 http://localhost:3366 ，读 d
 
 仓库根目录已含：
 
-- **`vercel.json`** — 安装 `bun install`、构建 `bun run build`、输出 `dist`
+- **`vercel.json`** — 安装 `npm install`、构建 `npm run build`、输出 `dist`
 - **`netlify.toml`** — 同上，发布目录 `dist`
+- **`wrangler.toml`** — Cloudflare Pages：`pages_build_output_dir` 为 `dist`（与下方构建输出目录一致）
 
 ### Vercel（vercel.app）
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fanynavs%2Fwebsite&install-command=bun%20install&build-command=bun%20run%20build&output-directory=dist)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fanynavs%2Fwebsite&install-command=npm%20install&build-command=npm%20run%20build&output-directory=dist)
 
-- 链接（同上）：`https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fanynavs%2Fwebsite&install-command=bun%20install&build-command=bun%20run%20build&output-directory=dist`
+- 链接（同上）：`https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fanynavs%2Fwebsite&install-command=npm%20install&build-command=npm%20run%20build&output-directory=dist`
 
 ### Netlify（netlify.app）
 
@@ -81,15 +82,17 @@ bun run dev      # 本地起静态服务，默认 http://localhost:3366 ，读 d
 
 ### Cloudflare Pages（`*.pages.dev` / 自定义域）
 
-Cloudflare 没有「在 URL 里填好 GitHub 仓库」的一键入口，需登录后在控制台里连 Git：
+[![Deploy to Cloudflare Pages](https://img.shields.io/badge/Deploy-Cloudflare%20Pages-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://dash.cloudflare.com/)
 
-1. 打开 [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Pages** → **创建项目** → **连接到 Git**
-2. 选仓库后，构建设置：
-   - **构建命令**：`bun install && bun run build`
-   - **构建输出目录**：`dist`
+**说明**：[官方「Deploy to Cloudflare」一键按钮](https://developers.cloudflare.com/workers/platform/deploy-buttons/)只面向 **Workers**（文档写明不支持 **Pages** 应用）。上面徽章会打开 Dashboard，登录后在 **Workers & Pages → Pages → 创建项目 → 连接到 Git** 即可；构建设置与根目录 `wrangler.toml` 对齐：
 
-[文档：Deploying a static HTML site](https://developers.cloudflare.com/pages/framework-guides/deploy-anything/)
+- **构建命令**：`npm install && npm run build`
+- **构建输出目录**：`dist`
+
+- 链接（同上）：`https://dash.cloudflare.com/`
+
+[文档：Deploying a static HTML site](https://developers.cloudflare.com/pages/framework-guides/deploy-anything/) · [Wrangler Pages 配置](https://developers.cloudflare.com/pages/functions/wrangler-configuration/)
 
 ## CI
 
-推送或 PR 时 GitHub Actions 会执行 `bun install --frozen-lockfile` 与 `bun run build`（见 `.github/workflows/build.yml`）。请把 `bun.lock` 纳入版本库，否则 frozen 安装会失败。
+推送或 PR 时 GitHub Actions 会执行 `npm ci` 与 `npm run build`（见 `.github/workflows/build.yml`）。请把 `package-lock.json` 纳入版本库，否则 `npm ci` 会失败。

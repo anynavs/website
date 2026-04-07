@@ -4,7 +4,7 @@
 
 **Live site (GitHub Pages):** [https://anynavs.github.io/website/](https://anynavs.github.io/website/)
 
-A **static navigation site generator** built with [Bun](https://bun.sh). It reads `config.json` and `links.json`, fills HTML templates under `template/`, and writes output to `dist/` for any static host (GitHub Pages, Cloudflare Pages, Nginx, etc.).
+A **static navigation site generator** built with **Node.js**. It reads `config.json` and `links.json`, fills HTML templates under `template/`, and writes output to `dist/` for any static host (GitHub Pages, Cloudflare Pages, Nginx, etc.).
 
 ## Features
 
@@ -15,14 +15,14 @@ A **static navigation site generator** built with [Bun](https://bun.sh). It read
 
 ## Prerequisites
 
-- [Bun](https://bun.sh) (latest stable recommended)
+- [Node.js](https://nodejs.org/) 20+ (LTS recommended)
 
 ## Commands
 
 ```bash
-bun install
-bun run build    # runs index.ts → writes dist/
-bun run dev      # static server, default http://localhost:3366 , serves dist/ (re-run build after template/data changes)
+npm install
+npm run build    # runs index.ts → writes dist/
+npm run dev        # build then static server, default http://localhost:3366 , serves dist/ (re-run build after template/data changes)
 ```
 
 ## Configuration
@@ -64,14 +64,15 @@ One-click deploy defaults to this repo [`anynavs/website`](https://github.com/an
 
 The repo root already includes:
 
-- **`vercel.json`** — `bun install`, `bun run build`, output `dist`
+- **`vercel.json`** — `npm install`, `npm run build`, output `dist`
 - **`netlify.toml`** — same build; publish directory `dist`
+- **`wrangler.toml`** — Cloudflare Pages: `pages_build_output_dir` is `dist` (matches the build output below)
 
 ### Vercel (vercel.app)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fanynavs%2Fwebsite&install-command=bun%20install&build-command=bun%20run%20build&output-directory=dist)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fanynavs%2Fwebsite&install-command=npm%20install&build-command=npm%20run%20build&output-directory=dist)
 
-- Same URL: `https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fanynavs%2Fwebsite&install-command=bun%20install&build-command=bun%20run%20build&output-directory=dist`
+- Same URL: `https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fanynavs%2Fwebsite&install-command=npm%20install&build-command=npm%20run%20build&output-directory=dist`
 
 ### Netlify (netlify.app)
 
@@ -81,15 +82,17 @@ The repo root already includes:
 
 ### Cloudflare Pages (`*.pages.dev` / custom domain)
 
-Cloudflare does not expose a one-click “prefill GitHub repo” URL. After you sign in, connect Git from the dashboard:
+[![Deploy to Cloudflare Pages](https://img.shields.io/badge/Deploy-Cloudflare%20Pages-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://dash.cloudflare.com/)
 
-1. Open [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Pages** → **Create project** → **Connect to Git**
-2. Pick the repo, then set:
-   - **Build command**: `bun install && bun run build`
-   - **Build output directory**: `dist`
+**Note:** The official [Deploy to Cloudflare](https://developers.cloudflare.com/workers/platform/deploy-buttons/) one-click flow targets **Workers** only (docs state **Pages** apps are not supported). The badge above opens the Dashboard; sign in, then **Workers & Pages → Pages → Create project → Connect to Git**. Use the same build settings as `wrangler.toml` in the repo root:
 
-[Docs: Deploying a static HTML site](https://developers.cloudflare.com/pages/framework-guides/deploy-anything/)
+- **Build command**: `npm install && npm run build`
+- **Build output directory**: `dist`
+
+- Same URL: `https://dash.cloudflare.com/`
+
+[Docs: Deploying a static HTML site](https://developers.cloudflare.com/pages/framework-guides/deploy-anything/) · [Wrangler Pages configuration](https://developers.cloudflare.com/pages/functions/wrangler-configuration/)
 
 ## CI
 
-On push and pull request, GitHub Actions runs `bun install --frozen-lockfile` and `bun run build` (see `.github/workflows/build.yml`). Commit `bun.lock` to the repo; otherwise the frozen install step will fail.
+On push and pull request, GitHub Actions runs `npm ci` and `npm run build` (see `.github/workflows/build.yml`). Commit `package-lock.json` to the repo; otherwise `npm ci` will fail.

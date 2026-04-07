@@ -30,12 +30,14 @@
             {
                 "name": "备用站1",
                 "url": "https://anynavs.netlify.app/",
+                "dofollow": true,
                 "domain": "anynavs.netlify.app",
                 "description": "netlify 备用站1"
             },
             {
                 "name": "备用站2",
                 "url": "https://anynavs.github.io/website/",
+                "dofollow": true,
                 "domain": "anynavs.github.io",
                 "description": "github 备用站2"
             },

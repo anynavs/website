@@ -1,0 +1,5 @@
+# Cloudflare Pages：Git 连接或 `npx wrangler pages deploy` 时读取输出目录
+# 文档：https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+name = "anynavs"
+compatibility_date = "2026-04-07"
+pages_build_output_dir = "./dist"
