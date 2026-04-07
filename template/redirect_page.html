@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NOISE 导航 | 安全中心</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#1d2025",
+                        "inverse-on-surface": "#53555a",
+                        "surface-dim": "#0c0e12",
+                        "surface-container-lowest": "#000000",
+                        "inverse-surface": "#f9f9ff",
+                        "primary-dim": "#3aa2ff",
+                        "surface-container": "#171a1f",
+                        "on-secondary-container": "#ccd0da",
+                        "on-surface": "#f6f6fc",
+                        "on-primary-container": "#002442",
+                        "primary-container": "#44a5ff",
+                        "primary-fixed-dim": "#2498f5",
+                        "surface-bright": "#292c33",
+                        "primary-fixed": "#44a5ff",
+                        "outline-variant": "#46484d",
+                        "tertiary-fixed": "#d797ff",
+                        "background": "#0c0e12",
+                        "tertiary-fixed-dim": "#c989f0",
+                        "tertiary": "#da9eff",
+                        "error-container": "#9f0519",
+                        "on-tertiary": "#511177",
+                        "inverse-primary": "#0062a5",
+                        "on-error-container": "#ffa8a3",
+                        "surface-container-highest": "#23262c",
+                        "on-primary-fixed": "#000000",
+                        "on-tertiary-fixed": "#2a0044",
+                        "tertiary-container": "#ce8ef6",
+                        "surface-container-low": "#111318",
+                        "error-dim": "#d7383b",
+                        "on-secondary-fixed-variant": "#555a62",
+                        "surface": "#0c0e12",
+                        "on-tertiary-fixed-variant": "#56187d",
+                        "tertiary-dim": "#c384eb",
+                        "on-secondary-fixed": "#393e46",
+                        "secondary-dim": "#cdd2db",
+                        "secondary": "#dbe0ea",
+                        "error": "#ff716c",
+                        "on-secondary": "#4b5058",
+                        "secondary-fixed-dim": "#cdd2db",
+                        "primary": "#6ab2ff",
+                        "on-primary": "#003055",
+                        "on-surface-variant": "#aaabb0",
+                        "on-background": "#f6f6fc",
+                        "on-primary-fixed-variant": "#002e51",
+                        "surface-variant": "#23262c",
+                        "surface-tint": "#6ab2ff",
+                        "on-tertiary-container": "#45006b",
+                        "outline": "#74757a",
+                        "secondary-container": "#42474f",
+                        "secondary-fixed": "#dbe0ea",
+                        "on-error": "#490006"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0c0e12;
+            color: #f6f6fc;
+        }
+        .glass-card {
+            background: rgba(23, 26, 31, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glow-button {
+            background: linear-gradient(135deg, #6ab2ff 0%, #44a5ff 100%);
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen flex flex-col selection:bg-primary/30 selection:text-primary">
+<!-- Header / Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 bg-[#0c0e12]/60 backdrop-blur-xl">
+<div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
+<div class="flex items-center space-x-2">
+<span class="text-xl font-bold tracking-tighter text-[#f6f6fc] font-inter">NOISE 导航</span>
+</div>
+<div class="flex items-center space-x-6">
+<span class="material-symbols-outlined text-[#dbe0ea] hover:bg-[#1d2025] transition-colors duration-300 p-2 rounded-full cursor-pointer" data-icon="settings">settings</span>
+<span class="material-symbols-outlined text-[#dbe0ea] hover:bg-[#1d2025] transition-colors duration-300 p-2 rounded-full cursor-pointer" data-icon="info">info</span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex items-center justify-center px-4 pt-20 pb-12">
+<div class="relative w-full max-w-lg">
+<!-- Background Decorative Glow -->
+<div class="absolute -top-24 -left-24 w-64 h-64 bg-primary/10 rounded-full blur-[100px]"></div>
+<div class="absolute -bottom-24 -right-24 w-64 h-64 bg-tertiary/10 rounded-full blur-[100px]"></div>
+<!-- Centralized Content Card -->
+<div class="glass-card relative z-10 p-10 rounded-xl border border-outline-variant/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex flex-col items-center text-center">
+<!-- Logo Placeholder -->
+<div class="mb-8 w-20 h-20 rounded-full bg-surface-container-high flex items-center justify-center ring-4 ring-primary/20">
+<span class="text-4xl font-extrabold tracking-tighter text-primary">N</span>
+</div>
+<!-- Titles -->
+<h1 class="text-2xl md:text-3xl font-bold tracking-tight text-on-surface mb-2 font-headline">NOISE 导航</h1>
+<p class="text-primary font-semibold tracking-widest text-xs uppercase mb-8">Safety Center</p>
+<!-- Redirect Message -->
+<p class="text-on-surface-variant text-sm mb-4">You are about to leave NOISE Navigation, heading to</p>
+<!-- Target URL Box -->
+<div class="w-full bg-surface-container-low py-4 px-6 rounded-xl mb-6 border-b-2 border-primary/30">
+<code class="text-primary font-medium text-base break-all">https://www.aboutcg.com</code>
+</div>
+<!-- Warning Block -->
+<div class="flex items-center space-x-3 text-error/80 mb-10 bg-error-container/5 py-3 px-5 rounded-full border border-error-container/10">
+<span class="material-symbols-outlined text-lg" data-icon="warning">warning</span>
+<span class="text-xs font-medium">Please pay attention to your account and property safety</span>
+</div>
+<!-- Countdown Button -->
+<button class="glow-button w-full py-4 px-8 rounded-xl text-on-primary-container font-bold text-sm tracking-wide shadow-lg shadow-primary/20 active:scale-95 transition-transform duration-200 flex items-center justify-center space-x-3">
+<span>2 seconds to auto-jump</span>
+<span class="material-symbols-outlined text-base" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Footer Shell -->
+<footer class="w-full py-8 bg-[#0c0e12] mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 w-full max-w-7xl mx-auto space-y-4 md:space-y-0">
+<p class="text-[10px] font-inter text-[#dbe0ea] opacity-40 uppercase tracking-widest">
+                © 2026 NOISE 导航 | Collected and Treasured Websites
+            </p>
+<div class="flex space-x-6">
+<a class="text-xs font-inter text-[#dbe0ea] opacity-40 hover:text-[#6ab2ff] hover:opacity-100 transition-all duration-300" href="#">Privacy</a>
+<a class="text-xs font-inter text-[#dbe0ea] opacity-40 hover:text-[#6ab2ff] hover:opacity-100 transition-all duration-300" href="#">Terms</a>
+<a class="text-xs font-inter text-[#dbe0ea] opacity-40 hover:text-[#6ab2ff] hover:opacity-100 transition-all duration-300" href="#">Support</a>
+</div>
+</div>
+</footer>
+<!-- Decorative Bottom Gradient -->
+<div class="fixed bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
+</body></html>

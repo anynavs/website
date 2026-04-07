@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html class="dark" lang="zh-CN">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>{{site_name}} | 安全跳转</title>
+
+    <!-- SEO -->
+    <meta name="description" content="{{site_description}}"/>
+    <meta property="og:title" content="{{site_name}} | 安全跳转"/>
+    <meta property="og:description" content="{{site_description}}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="{{og_url}}"/>
+    <meta property="og:image" content="{{og_image}}"/>
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="{{site_name}} | 安全跳转"/>
+    <meta name="twitter:description" content="{{site_description}}"/>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    {{svg_sprite}}
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#44a5ff",
+                        "outline-variant": "#46484d",
+                        "surface-tint": "#6ab2ff",
+                        "on-primary": "#003055",
+                        "tertiary-fixed-dim": "#c989f0",
+                        "outline": "#74757a",
+                        "on-background": "#f6f6fc",
+                        "on-primary-container": "#002442",
+                        "secondary": "#dbe0ea",
+                        "tertiary-dim": "#c384eb",
+                        "surface-container": "#171a1f",
+                        "tertiary-container": "#ce8ef6",
+                        "on-tertiary-container": "#45006b",
+                        "secondary-dim": "#cdd2db",
+                        "on-tertiary": "#511177",
+                        "primary-fixed": "#44a5ff",
+                        "primary-dim": "#3aa2ff",
+                        "primary-fixed-dim": "#2498f5",
+                        "tertiary": "#da9eff",
+                        "on-surface-variant": "#aaabb0",
+                        "inverse-surface": "#f9f9ff",
+                        "inverse-on-surface": "#53555a",
+                        "surface-container-lowest": "#000000",
+                        "error": "#ff716c",
+                        "on-surface": "#f6f6fc",
+                        "error-container": "#9f0519",
+                        "on-primary-fixed": "#000000",
+                        "inverse-primary": "#0062a5",
+                        "surface-container-low": "#111318",
+                        "on-secondary-fixed-variant": "#555a62",
+                        "surface-container-high": "#1d2025",
+                        "surface": "#0c0e12",
+                        "primary": "#6ab2ff",
+                        "background": "#0c0e12",
+                        "secondary-fixed-dim": "#cdd2db",
+                        "on-secondary-container": "#ccd0da",
+                        "on-secondary": "#4b5058",
+                        "on-error": "#490006",
+                        "on-primary-fixed-variant": "#002e51",
+                        "tertiary-fixed": "#d797ff",
+                        "on-tertiary-fixed-variant": "#56187d",
+                        "surface-variant": "#23262c",
+                        "secondary-fixed": "#dbe0ea",
+                        "on-secondary-fixed": "#393e46",
+                        "surface-bright": "#292c33",
+                        "surface-container-highest": "#23262c",
+                        "surface-dim": "#0c0e12",
+                        "error-dim": "#d7383b",
+                        "on-tertiary-fixed": "#2a0044",
+                        "on-error-container": "#ffa8a3",
+                        "secondary-container": "#42474f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: #0c0e12; color: #f6f6fc; }
+        .glass-card { background: rgba(23, 26, 31, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .glow-button { background: linear-gradient(135deg, #6ab2ff 0%, #44a5ff 100%); }
+        .glow-button.disabled { opacity: 0.5; cursor: not-allowed; }
+        .icon { width: 1em; height: 1em; display: inline-block; vertical-align: middle; flex-shrink: 0; }
+    </style>
+</head>
+<body class="bg-background min-h-screen flex flex-col selection:bg-primary/30 selection:text-primary">
+    <!-- Header -->
+    <header class="fixed top-0 w-full z-50 bg-[#0c0e12]/60 backdrop-blur-xl">
+        <div class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto">
+            <div class="flex items-center space-x-2">
+                <span class="text-xl font-bold tracking-tighter text-[#f6f6fc]">{{site_name}}</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center px-4 pt-20 pb-12">
+        <div class="relative w-full max-w-lg">
+            <div class="absolute -top-24 -left-24 w-64 h-64 bg-primary/10 rounded-full blur-[100px]"></div>
+            <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-tertiary/10 rounded-full blur-[100px]"></div>
+
+            <div class="glass-card relative z-10 p-10 rounded-xl border border-outline-variant/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex flex-col items-center text-center">
+                <div id="target-favicon-wrap" class="mb-8 w-20 h-20 rounded-full bg-surface-container-high flex items-center justify-center ring-4 ring-primary/20 overflow-hidden p-2">
+                    <img id="target-favicon" alt="" class="w-12 h-12 object-contain" width="48" height="48" decoding="async" hidden/>
+                </div>
+
+                <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-on-surface mb-2">{{site_name}}</h1>
+                <p class="text-primary font-semibold tracking-widest text-xs uppercase mb-8">安全跳转</p>
+
+                <p class="text-on-surface-variant text-sm mb-4">您即将离开 {{site_name}}，前往以下网站</p>
+
+                <div class="w-full bg-surface-container-low py-4 px-6 rounded-xl mb-6 border-b-2 border-primary/30">
+                    <code id="target-url" class="text-primary font-medium text-base break-all"></code>
+                </div>
+
+                <div class="flex items-center space-x-3 text-error/80 mb-10 bg-error-container/5 py-3 px-5 rounded-full border border-error-container/10">
+                    <svg class="icon w-5 h-5"><use href="#i-warning"/></svg>
+                    <span class="text-xs font-medium">请注意账号和财产安全</span>
+                </div>
+
+                <button id="jump-btn" class="glow-button disabled w-full py-4 px-8 rounded-xl text-on-primary-container font-bold text-sm tracking-wide shadow-lg shadow-primary/20 active:scale-95 transition-transform duration-200 flex items-center justify-center space-x-3">
+                    <span id="jump-text">3 秒后自动跳转</span>
+                    <svg class="icon w-4 h-4"><use href="#i-arrow-forward"/></svg>
+                </button>
+
+                <a href="/" class="mt-6 text-on-surface-variant hover:text-primary text-sm transition-colors">返回首页</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-8 bg-[#0c0e12] mt-auto">
+        <div class="flex flex-col md:flex-row justify-between items-center px-8 w-full max-w-7xl mx-auto space-y-4 md:space-y-0">
+            <p class="text-[10px] text-[#dbe0ea] opacity-40 uppercase tracking-widest">{{footer_copyright}}</p>
+            <div class="flex space-x-6">
+                <a class="text-xs text-[#dbe0ea] opacity-40 hover:text-[#6ab2ff] hover:opacity-100 transition-all duration-300" href="#">Privacy</a>
+                <a class="text-xs text-[#dbe0ea] opacity-40 hover:text-[#6ab2ff] hover:opacity-100 transition-all duration-300" href="#">Terms</a>
+                <a class="text-xs text-[#dbe0ea] opacity-40 hover:text-[#6ab2ff] hover:opacity-100 transition-all duration-300" href="#">Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="fixed bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
+
+    <script>
+        (function() {
+            var params = new URLSearchParams(window.location.search);
+            var targetUrl = params.get('url');
+            var urlEl = document.getElementById('target-url');
+            var jumpBtn = document.getElementById('jump-btn');
+            var jumpText = document.getElementById('jump-text');
+
+            var favWrap = document.getElementById('target-favicon-wrap');
+            var favImg = document.getElementById('target-favicon');
+
+            if (!targetUrl) {
+                urlEl.textContent = '未提供目标链接';
+                jumpText.textContent = '缺少目标链接';
+                if (favWrap) favWrap.style.display = 'none';
+                return;
+            }
+            urlEl.textContent = targetUrl;
+
+            if (favImg) {
+                try {
+                    var parsed = new URL(targetUrl);
+                    var host = parsed.hostname;
+                    if (host) {
+                        var originUrl = parsed.protocol + '//' + host + '/';
+                        favImg.src =
+                            'https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=' +
+                            encodeURIComponent(originUrl) +
+                            '&size=128';
+                        favImg.removeAttribute('hidden');
+                    }
+                } catch (e) {
+                    if (favWrap) favWrap.style.display = 'none';
+                }
+            }
+            var countdown = 3;
+            jumpText.textContent = countdown + ' 秒后自动跳转';
+            var timer = setInterval(function() {
+                countdown--;
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    jumpBtn.classList.remove('disabled');
+                    jumpText.textContent = '立即跳转';
+                    window.location.href = targetUrl;
+                } else {
+                    jumpText.textContent = countdown + ' 秒后自动跳转';
+                }
+            }, 1000);
+            jumpBtn.addEventListener('click', function() {
+                clearInterval(timer);
+                window.location.href = targetUrl;
+            });
+        })();
+    </script>
+</body>
+</html>

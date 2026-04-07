@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html class="dark" lang="zh-CN">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>{{og_title}}</title>
+
+    <!-- SEO -->
+    <meta name="description" content="{{og_description}}"/>
+    <meta property="og:title" content="{{og_title}}"/>
+    <meta property="og:description" content="{{og_description}}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="{{og_url}}"/>
+    <meta property="og:image" content="{{og_image}}"/>
+    <meta name="twitter:card" content="{{twitter_card}}"/>
+    <meta name="twitter:title" content="{{og_title}}"/>
+    <meta name="twitter:description" content="{{og_description}}"/>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    {{svg_sprite}}
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#44a5ff",
+                        "outline-variant": "#46484d",
+                        "surface-tint": "#6ab2ff",
+                        "on-primary": "#003055",
+                        "tertiary-fixed-dim": "#c989f0",
+                        "outline": "#74757a",
+                        "on-background": "#f6f6fc",
+                        "on-primary-container": "#002442",
+                        "secondary": "#dbe0ea",
+                        "tertiary-dim": "#c384eb",
+                        "surface-container": "#171a1f",
+                        "tertiary-container": "#ce8ef6",
+                        "on-tertiary-container": "#45006b",
+                        "secondary-dim": "#cdd2db",
+                        "on-tertiary": "#511177",
+                        "primary-fixed": "#44a5ff",
+                        "primary-dim": "#3aa2ff",
+                        "primary-fixed-dim": "#2498f5",
+                        "tertiary": "#da9eff",
+                        "on-surface-variant": "#aaabb0",
+                        "inverse-surface": "#f9f9ff",
+                        "inverse-on-surface": "#53555a",
+                        "surface-container-lowest": "#000000",
+                        "error": "#ff716c",
+                        "on-surface": "#f6f6fc",
+                        "error-container": "#9f0519",
+                        "on-primary-fixed": "#000000",
+                        "inverse-primary": "#0062a5",
+                        "surface-container-low": "#111318",
+                        "on-secondary-fixed-variant": "#555a62",
+                        "surface-container-high": "#1d2025",
+                        "surface": "#0c0e12",
+                        "primary": "#6ab2ff",
+                        "background": "#0c0e12",
+                        "secondary-fixed-dim": "#cdd2db",
+                        "on-secondary-container": "#ccd0da",
+                        "on-secondary": "#4b5058",
+                        "on-error": "#490006",
+                        "on-primary-fixed-variant": "#002e51",
+                        "tertiary-fixed": "#d797ff",
+                        "on-tertiary-fixed-variant": "#56187d",
+                        "surface-variant": "#23262c",
+                        "secondary-fixed": "#dbe0ea",
+                        "on-secondary-fixed": "#393e46",
+                        "surface-bright": "#292c33",
+                        "surface-container-highest": "#23262c",
+                        "surface-dim": "#0c0e12",
+                        "error-dim": "#d7383b",
+                        "on-tertiary-fixed": "#2a0044",
+                        "on-error-container": "#ffa8a3",
+                        "secondary-container": "#42474f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .tab-panel:not(.active) { display: none !important; }
+        .tab-panel.active { display: grid !important; }
+        .no-result { display: none; }
+        .no-result.show { display: flex; }
+        .search-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+        .search-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .icon { width: 1em; height: 1em; display: inline-block; vertical-align: middle; flex-shrink: 0; }
+        /* 亮色模式 */
+        html:not(.dark) body { background-color: #f5f5f9; color: #1a1c20; }
+        html:not(.dark) .sidebar-bg { background-color: #e8e9ed; }
+        html:not(.dark) .header-bg { background-color: rgba(245, 245, 249, 0.8); }
+        html:not(.dark) .card-bg { background-color: #eaeaef; }
+        html:not(.dark) .card-bg:hover { background-color: #dddde3; }
+        html:not(.dark) .surface-low-bg { background-color: #e2e3e8; }
+        html:not(.dark) .icon-bg { background-color: #dddde3; }
+        html:not(.dark) .text-main { color: #1a1c20; }
+        html:not(.dark) .text-sub { color: #53555a; }
+        html:not(.dark) .text-muted { color: #74757a; }
+        html:not(.dark) .text-accent { color: #0062a5; }
+        html:not(.dark) .border-subtle { border-color: #d0d1d6; }
+        html:not(.dark) .footer-bg { background-color: #e8e9ed; border-color: #d0d1d6; }
+    </style>
+</head>
+<body class="bg-background text-on-surface selection:bg-primary/30 min-h-screen flex">
+<!-- SideNavBar -->
+<aside class="sidebar-bg fixed left-0 top-0 h-full w-20 bg-[#111318] flex flex-col items-center py-8 z-40">
+    <a href="/" class="mb-10 group cursor-pointer">
+        <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:border-primary/40 transition-all overflow-hidden p-1">
+            <img src="/logo.png" alt="{{site_name_attr}}" width="40" height="40" class="w-full h-full object-contain" decoding="async"/>
+        </div>
+        <p class="text-xs font-medium uppercase tracking-widest text-blue-400 mt-2 text-center">导航</p>
+    </a>
+    <nav class="flex flex-col w-full gap-2" id="sidenav">
+        {{sidenav}}
+    </nav>
+    <div class="mt-auto">
+        <a class="text-sub text-slate-500 flex flex-col items-center py-4 hover:bg-slate-800/50 transition-all hover:translate-x-1 duration-300" href="/about.html">
+            <svg class="icon w-6 h-6"><use href="#i-info"/></svg>
+            <span class="text-xs font-medium uppercase tracking-widest mt-1">关于</span>
+        </a>
+    </div>
+</aside>
+
+<!-- Main Content Canvas -->
+<div class="flex-1 ml-20 flex flex-col min-h-screen">
+    <!-- TopAppBar -->
+    <header class="header-bg fixed top-0 left-20 right-0 h-16 bg-[#0c0e12]/60 backdrop-blur-xl z-50 flex justify-between items-center px-8 shadow-2xl shadow-black/50">
+        <div class="flex items-center gap-10">
+            <span class="text-xl font-bold tracking-tighter text-main text-slate-100">{{site_name}}</span>
+            <nav class="hidden md:flex items-center gap-6 font-sans text-base tracking-wider uppercase">
+                <a class="text-accent text-blue-400 font-bold border-b-2 border-blue-400 pb-1 hover:text-blue-300 transition-colors" href="/">首页</a>
+                <a class="text-sub text-slate-400 hover:text-blue-300 transition-colors" href="/about.html">关于</a>
+            </nav>
+        </div>
+        <div class="flex items-center gap-5">
+            <svg id="search-btn" class="icon w-5 h-5 text-sub text-slate-400 hover:text-primary transition-colors cursor-pointer"><use href="#i-search"/></svg>
+            <svg id="theme-toggle" class="icon w-5 h-5 text-sub text-slate-400 hover:text-primary transition-colors cursor-pointer"><use href="#i-dark-mode"/></svg>
+        </div>
+    </header>
+
+    <main class="pt-24 px-8 pb-12 max-w-7xl mx-auto w-full flex-grow">
+        <!-- Hero section -->
+        <section class="mb-12">
+            <div class="surface-low-bg bg-surface-container-low rounded-3xl p-10 relative overflow-hidden border border-subtle border-outline-variant/10">
+                <div class="relative z-10 max-w-2xl">
+                    <span class="inline-block px-3 py-1 bg-tertiary/10 text-tertiary rounded-full text-[10px] font-bold tracking-widest uppercase mb-4">{{hero_badge}}</span>
+                    <h1 class="text-main text-4xl md:text-5xl font-bold tracking-tight text-on-surface mb-4 leading-tight">{{hero_title}}</h1>
+                    <p class="text-sub text-on-surface-variant text-lg mb-8 max-w-lg">{{hero_subtitle}}</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Overlay -->
+        <div id="search-overlay" class="search-overlay fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-start justify-center pt-32">
+            <div class="w-full max-w-xl mx-4 surface-low-bg bg-surface-container-low rounded-2xl border border-subtle border-outline-variant/10 shadow-2xl overflow-hidden">
+                <div class="flex items-center gap-3 px-5 py-4 border-b border-subtle border-outline-variant/10">
+                    <svg class="icon w-5 h-5 text-sub text-slate-400"><use href="#i-search"/></svg>
+                    <input id="search-input" type="text" placeholder="搜索网站名称或描述..." class="flex-1 bg-transparent text-main text-on-surface outline-none text-sm placeholder:text-on-surface-variant/50" autocomplete="off"/>
+                    <kbd class="text-[10px] text-muted text-on-surface-variant px-2 py-0.5 rounded border border-subtle border-outline-variant/20">ESC</kbd>
+                </div>
+                <div id="search-results" class="max-h-80 overflow-y-auto p-2">
+                    <p class="text-sub text-on-surface-variant text-base text-center py-8">输入关键词开始搜索</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic Categories -->
+        {{categories}}
+
+        <!-- No Result -->
+        <div id="no-result" class="no-result flex-col items-center justify-center py-20">
+            <svg class="icon w-12 h-12 text-muted text-on-surface-variant/30 mb-4"><use href="#i-search-off"/></svg>
+            <p class="text-sub text-on-surface-variant text-sm">没有找到匹配的网站</p>
+        </div>
+
+        <!-- Friendly Links Section -->
+        {{friendly_links}}
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-bg w-full py-12 bg-[#0c0e12] flex flex-col items-center gap-4 border-t border-subtle border-slate-800/30 mt-auto">
+        <p class="text-xs text-sub text-slate-500 font-light">{{footer_copyright}}</p>
+    </footer>
+</div>
+
+<!-- Scripts -->
+<script>
+(function() {
+    // ── 主题切换 ──
+    var themeToggle = document.getElementById('theme-toggle');
+    var html = document.documentElement;
+    var saved = localStorage.getItem('theme');
+    if (saved === 'light') {
+        html.classList.remove('dark');
+        if (themeToggle) themeToggle.innerHTML = '<use href="#i-light-mode"/>';
+    }
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                this.innerHTML = '<use href="#i-light-mode"/>';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                this.innerHTML = '<use href="#i-dark-mode"/>';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    }
+
+    // ── Tab 切换 ──
+    document.querySelectorAll('.tab-group').forEach(function(group) {
+        var tabs = group.querySelectorAll('.tab-btn');
+        var panels = group.querySelectorAll('.tab-panel');
+        tabs.forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                var target = this.getAttribute('data-tab');
+                tabs.forEach(function(t) {
+                    t.classList.remove('bg-primary-container', 'text-on-primary-container');
+                    t.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+                });
+                this.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+                this.classList.add('bg-primary-container', 'text-on-primary-container');
+                panels.forEach(function(p) { p.classList.remove('active'); });
+                var panel = group.querySelector('[data-panel="' + target + '"]');
+                if (panel) panel.classList.add('active');
+            });
+        });
+    });
+
+    // ── 搜索功能 ──
+    var searchBtn = document.getElementById('search-btn');
+    var searchOverlay = document.getElementById('search-overlay');
+    var searchInput = document.getElementById('search-input');
+    var searchResults = document.getElementById('search-results');
+    var noResult = document.getElementById('no-result');
+    var allCards = document.querySelectorAll('.link-card');
+
+    var linkData = [];
+    allCards.forEach(function(card) {
+        var a = card.closest('a');
+        if (!a) return;
+        linkData.push({
+            name: card.getAttribute('data-name') || '',
+            desc: card.getAttribute('data-desc') || '',
+            url: a.getAttribute('href') || '',
+            el: card.closest('a')
+        });
+    });
+
+    function openSearch() {
+        searchOverlay.classList.add('open');
+        searchInput.value = '';
+        searchResults.innerHTML = '<p class="text-on-surface-variant text-base text-center py-8">输入关键词开始搜索</p>';
+        noResult.classList.remove('show');
+        setTimeout(function() { searchInput.focus(); }, 100);
+    }
+    function closeSearch() {
+        searchOverlay.classList.remove('open');
+        searchInput.value = '';
+    }
+
+    searchBtn.addEventListener('click', openSearch);
+    searchOverlay.addEventListener('click', function(e) {
+        if (e.target === searchOverlay) closeSearch();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeSearch();
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+    });
+
+    searchInput.addEventListener('input', function() {
+        var q = this.value.trim().toLowerCase();
+        if (!q) {
+            searchResults.innerHTML = '<p class="text-on-surface-variant text-base text-center py-8">输入关键词开始搜索</p>';
+            allCards.forEach(function(el) { el.style.display = ''; });
+            noResult.classList.remove('show');
+            return;
+        }
+        var visibleCount = 0;
+        allCards.forEach(function(card) {
+            var a = card.closest('a');
+            if (!a) return;
+            var name = (card.getAttribute('data-name') || '').toLowerCase();
+            var desc = (card.getAttribute('data-desc') || '').toLowerCase();
+            var match = name.indexOf(q) !== -1 || desc.indexOf(q) !== -1;
+            a.style.display = match ? '' : 'none';
+            if (match) visibleCount++;
+        });
+        document.querySelectorAll('.category-section').forEach(function(sec) {
+            var hasVisible = false;
+            sec.querySelectorAll('a.link-card-wrap').forEach(function(a) {
+                if (a.style.display !== 'none') hasVisible = true;
+            });
+            sec.style.display = hasVisible ? '' : 'none';
+        });
+        noResult.classList.toggle('show', visibleCount === 0);
+
+        var matched = linkData.filter(function(d) {
+            return d.name.toLowerCase().indexOf(q) !== -1 || d.desc.toLowerCase().indexOf(q) !== -1;
+        });
+        if (matched.length === 0) {
+            searchResults.innerHTML = '<p class="text-on-surface-variant text-base text-center py-8">没有找到匹配的结果</p>';
+        } else {
+            var h = matched.slice(0, 10).map(function(d) {
+                return '<a href="' + d.url + '" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-surface-container-high transition-colors">' +
+                    '<svg class="icon w-5 h-5 text-primary"><use href="#i-language"/></svg>' +
+                    '<div class="flex-1 min-w-0">' +
+                    '<p class="text-base font-medium text-on-surface truncate">' + d.name + '</p>' +
+                    '<p class="text-sm text-on-surface-variant truncate">' + d.desc + '</p>' +
+                    '</div></a>';
+            }).join('');
+            searchResults.innerHTML = h;
+        }
+    });
+})();
+</script>
+</body>
+</html>
