@@ -45,9 +45,35 @@ interface Config {
   friendly_links?: { name: string; url: string; nofollow?: boolean; description?: string }[];
   /** 可选；首页与关于页顶栏、页脚 GitHub 仓库链接 */
   github_repo_url?: string;
+  /**
+   * 子路径前缀（无前导以外的尾部斜杠），如 GitLab 项目页 `https://ns.gitlab.io/foo/` 填 `/foo`。
+   * 也可用环境变量 BASE_PATH（CI 里已用 CI_PROJECT_NAME 自动设置）。
+   */
+  base_path?: string;
 }
 
 // ── 工具函数 ──────────────────────────────────────────────
+
+/** 优先读 BASE_PATH，否则 config.base_path；空表示站点在域名根路径 */
+function basePathPrefix(config: Config): string {
+  const env = process.env.BASE_PATH?.trim();
+  const raw =
+    env !== undefined && env !== "" ? env : (config.base_path ?? "").trim();
+  if (!raw) return "";
+  return raw.replace(/\/+$/, "") || "";
+}
+
+/** 根相对路径加前缀，path 须以 / 开头 */
+function withBase(config: Config, path: string): string {
+  const b = basePathPrefix(config);
+  const p = path.startsWith("/") ? path : `/${path}`;
+  return b ? `${b}${p}` : p;
+}
+
+function homeUrl(config: Config): string {
+  const b = basePathPrefix(config);
+  return b ? `${b}/` : "/";
+}
 
 function isLinkItem(item: LinkItem | SubCategory): item is LinkItem {
   return "url" in item && "domain" in item;
@@ -69,17 +95,18 @@ function faviconUrl(domain: string): string {
   return `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://${domain}&size=64`;
 }
 
-function redirectUrl(url: string): string {
-  return `/redirect.html?url=${encodeURIComponent(url)}`;
+function redirectUrl(url: string, config: Config): string {
+  const p = withBase(config, "/redirect.html");
+  return `${p}?url=${encodeURIComponent(url)}`;
 }
 
 // ── HTML 生成器 ───────────────────────────────────────────
 
 /** 生成单个链接卡片 */
-function linkCard(item: LinkItem): string {
+function linkCard(item: LinkItem, config: Config): string {
   const escapedName = escapeHtml(item.name);
   const escapedDesc = escapeHtml(item.description);
-  const href = item.dofollow ? item.url : redirectUrl(item.url);
+  const href = item.dofollow ? item.url : redirectUrl(item.url, config);
   const escapedHref = escapeAttr(href);
   const favicon = faviconUrl(item.domain);
 
@@ -100,9 +127,9 @@ function linkCard(item: LinkItem): string {
 }
 
 /** 生成扁平分类 */
-function flatCategory(cat: Category): string {
+function flatCategory(cat: Category, config: Config): string {
   const items = cat.list as LinkItem[];
-  const cards = items.map(linkCard).join("\n                ");
+  const cards = items.map((i) => linkCard(i, config)).join("\n                ");
   const escapedName = escapeHtml(cat.name);
 
   return `
@@ -120,7 +147,7 @@ function flatCategory(cat: Category): string {
 }
 
 /** 生成带 tab 切换的嵌套分类 */
-function tabCategory(cat: Category): string {
+function tabCategory(cat: Category, config: Config): string {
   const subs = cat.list as SubCategory[];
   const escapedCatName = escapeHtml(cat.name);
 
@@ -135,7 +162,7 @@ function tabCategory(cat: Category): string {
     .map(
       (sub, i) => `
                 <div class="tab-panel grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 ${i === 0 ? "active" : ""}" data-panel="${i}">
-                    ${sub.list.map(linkCard).join("\n                    ")}
+                    ${sub.list.map((i) => linkCard(i, config)).join("\n                    ")}
                 </div>`
     )
     .join("\n");
@@ -278,7 +305,7 @@ function aboutPageHtml(config: Config, categories: Category[], svgSprite: string
     <meta property="og:description" content="${escapeHtml(config.og_description)}"/>
     <meta property="og:type" content="website"/>
     <meta name="twitter:card" content="${config.twitter_card}"/>
-    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="${escapeAttr(withBase(config, "/favicon.ico"))}" type="image/x-icon"/>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     ${svgSprite}
     <script id="tailwind-config">
@@ -308,20 +335,20 @@ function aboutPageHtml(config: Config, categories: Category[], svgSprite: string
 </head>
 <body class="bg-background text-on-surface selection:bg-primary/30 min-h-screen flex">
 <aside class="sidebar-bg fixed left-0 top-0 h-full w-20 bg-[#111318] flex flex-col items-center py-8 z-40">
-    <a href="/" class="mb-10 group cursor-pointer">
+    <a href="${escapeAttr(homeUrl(config))}" class="mb-10 group cursor-pointer">
         <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:border-primary/40 transition-all overflow-hidden p-1">
-            <img src="/logo.png" alt="${escapeAttr(config.site_name)}" width="40" height="40" class="w-full h-full object-contain" decoding="async"/>
+            <img src="${escapeAttr(withBase(config, "/logo.png"))}" alt="${escapeAttr(config.site_name)}" width="40" height="40" class="w-full h-full object-contain" decoding="async"/>
         </div>
         <p class="text-xs font-medium uppercase tracking-widest text-blue-400 mt-2 text-center">导航</p>
     </a>
     <nav class="flex flex-col w-full gap-2">
-        <a class="text-slate-500 flex flex-col items-center py-4 hover:bg-slate-800/50 transition-all hover:translate-x-1 duration-300" href="/">
+        <a class="text-slate-500 flex flex-col items-center py-4 hover:bg-slate-800/50 transition-all hover:translate-x-1 duration-300" href="${escapeAttr(homeUrl(config))}">
             <svg class="icon w-6 h-6"><use href="#i-home"/></svg>
             <span class="text-xs font-medium uppercase tracking-widest mt-1">首页</span>
         </a>
     </nav>
     <div class="mt-auto">
-        <a class="text-blue-400 border-l-4 border-blue-400 bg-blue-400/5 flex flex-col items-center py-4 transition-all hover:translate-x-1 duration-300" href="/about.html">
+        <a class="text-blue-400 border-l-4 border-blue-400 bg-blue-400/5 flex flex-col items-center py-4 transition-all hover:translate-x-1 duration-300" href="${escapeAttr(withBase(config, "/about.html"))}">
             <svg class="icon w-6 h-6 fill-current"><use href="#i-info"/></svg>
             <span class="text-xs font-medium uppercase tracking-widest mt-1">关于</span>
         </a>
@@ -332,8 +359,8 @@ function aboutPageHtml(config: Config, categories: Category[], svgSprite: string
         <div class="flex items-center gap-10">
             <span class="text-xl font-bold tracking-tighter text-main text-slate-100">${escapeHtml(config.site_name)}</span>
             <nav class="hidden md:flex items-center gap-6 font-sans text-base tracking-wider uppercase">
-                <a class="text-sub text-slate-400 hover:text-blue-300 transition-colors" href="/">首页</a>
-                <a class="text-accent text-blue-400 font-bold border-b-2 border-blue-400 pb-1 hover:text-blue-300 transition-colors" href="/about.html">关于</a>
+                <a class="text-sub text-slate-400 hover:text-blue-300 transition-colors" href="${escapeAttr(homeUrl(config))}">首页</a>
+                <a class="text-accent text-blue-400 font-bold border-b-2 border-blue-400 pb-1 hover:text-blue-300 transition-colors" href="${escapeAttr(withBase(config, "/about.html"))}">关于</a>
             </nav>
         </div>
         <div class="flex items-center gap-5">
@@ -345,7 +372,7 @@ function aboutPageHtml(config: Config, categories: Category[], svgSprite: string
         <div class="surface-low-bg bg-surface-container-low rounded-2xl p-8 border border-subtle border-outline-variant/10 mb-8">
             <div class="flex items-center gap-4 mb-6">
                 <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20 overflow-hidden p-1.5 shrink-0">
-                    <img src="/logo.png" alt="${escapeAttr(config.site_name)}" width="64" height="64" class="w-full h-full object-contain" decoding="async"/>
+                    <img src="${escapeAttr(withBase(config, "/logo.png"))}" alt="${escapeAttr(config.site_name)}" width="64" height="64" class="w-full h-full object-contain" decoding="async"/>
                 </div>
                 <div>
                     <h1 class="text-2xl font-bold text-main text-on-surface">${escapeHtml(config.site_name)}</h1>
@@ -378,7 +405,7 @@ function aboutPageHtml(config: Config, categories: Category[], svgSprite: string
                     ? (cat.list as SubCategory[]).map(s => escapeHtml(s.name)).join("、")
                     : "";
                   return `<div class="flex items-center justify-between py-2">
-                        <a href="/#cat-${encodeURIComponent(cat.name)}" class="flex items-center gap-3 hover:text-primary transition-colors">
+                        <a href="${escapeAttr(homeUrl(config))}#cat-${encodeURIComponent(cat.name)}" class="flex items-center gap-3 hover:text-primary transition-colors">
                             <svg class="icon w-5 h-5 text-primary${i === 0 ? " fill-current" : ""}"><use href="#${i === 0 ? "i-star" : "i-folder"}"/></svg>
                             <span class="text-main text-base font-medium text-on-surface">${escapeHtml(cat.name)}</span>
                             ${subs ? `<span class="text-muted text-on-surface-variant text-sm">${subs}</span>` : ""}
@@ -443,6 +470,7 @@ function replacePlaceholders(
   const placeholders: Record<string, string> = {
     "{{site_name}}": config.site_name,
     "{{site_name_attr}}": escapeAttr(config.site_name),
+    "{{base_path}}": basePathPrefix(config),
     "{{site_description}}": config.site_description,
     "{{hero_badge}}": config.hero_badge,
     "{{hero_title}}": config.hero_title,
@@ -490,9 +518,9 @@ async function main() {
   const categoriesHtml = categories
     .map((cat) => {
       if (cat.notab || (cat.list.length > 0 && isLinkItem(cat.list[0]!))) {
-        return flatCategory(cat);
+        return flatCategory(cat, config);
       }
-      return tabCategory(cat);
+      return tabCategory(cat, config);
     })
     .join("\n");
 

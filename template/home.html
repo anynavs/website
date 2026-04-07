@@ -16,7 +16,7 @@
     <meta name="twitter:title" content="{{og_title}}"/>
     <meta name="twitter:description" content="{{og_description}}"/>
 
-    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="{{base_path}}/favicon.ico" type="image/x-icon"/>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     {{svg_sprite}}
     <script id="tailwind-config">
@@ -129,9 +129,9 @@
 <body class="bg-background text-on-surface selection:bg-primary/30 min-h-screen flex">
 <!-- SideNavBar -->
 <aside class="sidebar-bg fixed left-0 top-0 h-full w-20 bg-[#111318] flex flex-col items-center py-8 z-40">
-    <a href="/" class="mb-10 group cursor-pointer">
+    <a href="{{base_path}}/" class="mb-10 group cursor-pointer">
         <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:border-primary/40 transition-all overflow-hidden p-1">
-            <img src="/logo.png" alt="{{site_name_attr}}" width="40" height="40" class="w-full h-full object-contain" decoding="async"/>
+            <img src="{{base_path}}/logo.png" alt="{{site_name_attr}}" width="40" height="40" class="w-full h-full object-contain" decoding="async"/>
         </div>
         <p class="text-xs font-medium uppercase tracking-widest text-blue-400 mt-2 text-center">导航</p>
     </a>
@@ -139,7 +139,7 @@
         {{sidenav}}
     </nav>
     <div class="mt-auto">
-        <a class="text-sub text-slate-500 flex flex-col items-center py-4 hover:bg-slate-800/50 transition-all hover:translate-x-1 duration-300" href="/about.html">
+        <a class="text-sub text-slate-500 flex flex-col items-center py-4 hover:bg-slate-800/50 transition-all hover:translate-x-1 duration-300" href="{{base_path}}/about.html">
             <svg class="icon w-6 h-6"><use href="#i-info"/></svg>
             <span class="text-xs font-medium uppercase tracking-widest mt-1">关于</span>
         </a>
@@ -153,8 +153,8 @@
         <div class="flex items-center gap-10">
             <span class="text-xl font-bold tracking-tighter text-main text-slate-100">{{site_name}}</span>
             <nav class="hidden md:flex items-center gap-6 font-sans text-base tracking-wider uppercase">
-                <a class="text-accent text-blue-400 font-bold border-b-2 border-blue-400 pb-1 hover:text-blue-300 transition-colors" href="/">首页</a>
-                <a class="text-sub text-slate-400 hover:text-blue-300 transition-colors" href="/about.html">关于</a>
+                <a class="text-accent text-blue-400 font-bold border-b-2 border-blue-400 pb-1 hover:text-blue-300 transition-colors" href="{{base_path}}/">首页</a>
+                <a class="text-sub text-slate-400 hover:text-blue-300 transition-colors" href="{{base_path}}/about.html">关于</a>
             </nav>
         </div>
         <div class="flex items-center gap-5">

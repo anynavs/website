@@ -7,6 +7,7 @@
 - [GitHub Pages](https://anynavs.github.io/website/)
 - [Netlify](https://anynavs.netlify.app/)
 - [Cloudflare Workers](https://website.anynavs.workers.dev/)
+- [GitLab Pages](https://website-a685e6.gitlab.io/)
 
 用 **Node.js** 写的**静态导航站生成器**：读 `config.json` 与 `links.json`，套 `template/` 里的 HTML，输出到 `dist/`，可直接丢到任意静态托管（GitHub Pages、Cloudflare Pages、Nginx 等）。
 

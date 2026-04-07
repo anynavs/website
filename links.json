@@ -49,6 +49,13 @@
                 "description": "workers 备用站3"
             },
             {
+                "name": "备用站4",
+                "url": "https://website-a685e6.gitlab.io/",
+                "dofollow": true,
+                "domain": "website-a685e6.gitlab.io",
+                "description": "gitlab 备用站4"
+            },
+            {
                 "name": "Pinterest",
                 "url": "https://www.pinterest.com",
                 "domain": "www.pinterest.com",
