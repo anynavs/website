@@ -1,5 +1,10 @@
-# Cloudflare Pages：Git 连接或 `npx wrangler pages deploy` 时读取输出目录
-# 文档：https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+# Workers：`npx wrangler deploy` 上传静态资源（构建产物 dist/）
+# https://developers.cloudflare.com/workers/static-assets/binding/
+#
+# Cloudflare Pages（Git 连接）：在控制台填「构建输出目录」为 dist，或 CLI：`npx wrangler pages deploy dist`
+# https://developers.cloudflare.com/pages/functions/wrangler-configuration/
 name = "anynavs"
 compatibility_date = "2026-04-07"
-pages_build_output_dir = "./dist"
+
+[assets]
+directory = "./dist"

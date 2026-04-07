@@ -66,7 +66,7 @@ The repo root already includes:
 
 - **`vercel.json`** — `npm install`, `npm run build`, output `dist`
 - **`netlify.toml`** — same build; publish directory `dist`
-- **`wrangler.toml`** — Cloudflare Pages: `pages_build_output_dir` is `dist` (matches the build output below)
+- **`wrangler.toml`** — **Workers** `wrangler deploy`: `[assets].directory` is `dist`; **Pages** (Git): set output directory to `dist` in the dashboard (no `pages_build_output_dir` here — avoids clashing with Workers deploy)
 
 ### Vercel (vercel.app)
 
@@ -84,14 +84,14 @@ The repo root already includes:
 
 [![Deploy to Cloudflare Pages](https://img.shields.io/badge/Deploy-Cloudflare%20Pages-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://dash.cloudflare.com/)
 
-**Note:** The official [Deploy to Cloudflare](https://developers.cloudflare.com/workers/platform/deploy-buttons/) one-click flow targets **Workers** only (docs state **Pages** apps are not supported). The badge above opens the Dashboard; sign in, then **Workers & Pages → Pages → Create project → Connect to Git**. Use the same build settings as `wrangler.toml` in the repo root:
+**Note:** The official [Deploy to Cloudflare](https://developers.cloudflare.com/workers/platform/deploy-buttons/) one-click flow targets **Workers** only (docs state **Pages** apps are not supported). The badge above opens the Dashboard; sign in, then **Workers & Pages → Pages → Create project → Connect to Git**. Build settings below (enter `dist` in the dashboard for Pages; Workers uses `[assets]` in `wrangler.toml`):
 
 - **Build command**: `npm install && npm run build`
 - **Build output directory**: `dist`
 
 - Same URL: `https://dash.cloudflare.com/`
 
-[Docs: Deploying a static HTML site](https://developers.cloudflare.com/pages/framework-guides/deploy-anything/) · [Wrangler Pages configuration](https://developers.cloudflare.com/pages/functions/wrangler-configuration/)
+[Docs: Deploying a static HTML site](https://developers.cloudflare.com/pages/framework-guides/deploy-anything/) · [Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/binding/) · [Wrangler Pages configuration](https://developers.cloudflare.com/pages/functions/wrangler-configuration/)
 
 ## CI
 

@@ -66,7 +66,7 @@ npm run dev        # 先 build 再起静态服务，默认 http://localhost:3366
 
 - **`vercel.json`** — 安装 `npm install`、构建 `npm run build`、输出 `dist`
 - **`netlify.toml`** — 同上，发布目录 `dist`
-- **`wrangler.toml`** — Cloudflare Pages：`pages_build_output_dir` 为 `dist`（与下方构建输出目录一致）
+- **`wrangler.toml`** — **Workers** `wrangler deploy`：`[assets].directory` 指向 `dist`；**Pages**（Git）在控制台填输出目录 `dist`（本文件不含 `pages_build_output_dir`，避免与 Workers 部署混用报错）
 
 ### Vercel（vercel.app）
 
@@ -84,14 +84,14 @@ npm run dev        # 先 build 再起静态服务，默认 http://localhost:3366
 
 [![Deploy to Cloudflare Pages](https://img.shields.io/badge/Deploy-Cloudflare%20Pages-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://dash.cloudflare.com/)
 
-**说明**：[官方「Deploy to Cloudflare」一键按钮](https://developers.cloudflare.com/workers/platform/deploy-buttons/)只面向 **Workers**（文档写明不支持 **Pages** 应用）。上面徽章会打开 Dashboard，登录后在 **Workers & Pages → Pages → 创建项目 → 连接到 Git** 即可；构建设置与根目录 `wrangler.toml` 对齐：
+**说明**：[官方「Deploy to Cloudflare」一键按钮](https://developers.cloudflare.com/workers/platform/deploy-buttons/)只面向 **Workers**（文档写明不支持 **Pages** 应用）。上面徽章会打开 Dashboard，登录后在 **Workers & Pages → Pages → 创建项目 → 连接到 Git** 即可；构建设置如下（Pages 在控制台填写；Workers 用 `wrangler.toml` 里 `[assets]`）：
 
 - **构建命令**：`npm install && npm run build`
 - **构建输出目录**：`dist`
 
 - 链接（同上）：`https://dash.cloudflare.com/`
 
-[文档：Deploying a static HTML site](https://developers.cloudflare.com/pages/framework-guides/deploy-anything/) · [Wrangler Pages 配置](https://developers.cloudflare.com/pages/functions/wrangler-configuration/)
+[文档：Deploying a static HTML site](https://developers.cloudflare.com/pages/framework-guides/deploy-anything/) · [Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/binding/) · [Wrangler Pages 配置](https://developers.cloudflare.com/pages/functions/wrangler-configuration/)
 
 ## CI
 
