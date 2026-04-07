@@ -56,6 +56,13 @@
                 "description": "gitlab 备用站4"
             },
             {
+                "name": "备用站5",
+                "url": "https://website-rqu5.onrender.com/",
+                "dofollow": true,
+                "domain": "website-rqu5.onrender.com",
+                "description": "render 备用站5"
+            },
+            {
                 "name": "Pinterest",
                 "url": "https://www.pinterest.com",
                 "domain": "www.pinterest.com",

@@ -8,6 +8,7 @@
 - [Netlify](https://anynavs.netlify.app/)
 - [Cloudflare Workers](https://website.anynavs.workers.dev/)
 - [GitLab Pages](https://website-a685e6.gitlab.io/)
+- [Render](https://website-rqu5.onrender.com)
 
 用 **Node.js** 写的**静态导航站生成器**：读 `config.json` 与 `links.json`，套 `template/` 里的 HTML，输出到 `dist/`，可直接丢到任意静态托管（GitHub Pages、Cloudflare Pages、Nginx 等）。
 
@@ -84,6 +85,12 @@ npm run dev        # 先 build 再起静态服务，默认 http://localhost:3366
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/anynavs/website)
 
 - 链接（同上）：`https://app.netlify.com/start/deploy?repository=https://github.com/anynavs/website`
+
+### Render（onrender.com）
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/anynavs/website)
+
+- 链接（同上）：`https://render.com/deploy?repo=https://github.com/anynavs/website`
 
 ### Cloudflare Pages（`*.pages.dev` / 自定义域）
 

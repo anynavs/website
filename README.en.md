@@ -8,6 +8,7 @@
 - [Netlify](https://anynavs.netlify.app/)
 - [Cloudflare Workers](https://website.anynavs.workers.dev/)
 - [GitLab Pages](https://website-a685e6.gitlab.io/)
+- [Render](https://website-rqu5.onrender.com)
 
 A **static navigation site generator** built with **Node.js**. It reads `config.json` and `links.json`, fills HTML templates under `template/`, and writes output to `dist/` for any static host (GitHub Pages, Cloudflare Pages, Nginx, etc.).
 
@@ -84,6 +85,12 @@ The repo root already includes:
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/anynavs/website)
 
 - Same URL: `https://app.netlify.com/start/deploy?repository=https://github.com/anynavs/website`
+
+### Render (onrender.com)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/anynavs/website)
+
+- Same URL: `https://render.com/deploy?repo=https://github.com/anynavs/website`
 
 ### Cloudflare Pages (`*.pages.dev` / custom domain)
 
