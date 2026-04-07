@@ -42,6 +42,13 @@
                 "description": "github 备用站2"
             },
             {
+                "name": "备用站3",
+                "url": "https://website.anynavs.workers.dev/",
+                "dofollow": true,
+                "domain": "website.anynavs.workers.dev",
+                "description": "workers 备用站3"
+            },
+            {
                 "name": "Pinterest",
                 "url": "https://www.pinterest.com",
                 "domain": "www.pinterest.com",

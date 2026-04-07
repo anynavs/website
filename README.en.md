@@ -2,7 +2,11 @@
 
 **Language:** English · [中文](README.md)
 
-**Live site (GitHub Pages):** [https://anynavs.github.io/website/](https://anynavs.github.io/website/)
+**Live sites:**
+
+- [GitHub Pages](https://anynavs.github.io/website/)
+- [Netlify](https://anynavs.netlify.app/)
+- [Cloudflare Workers](https://website.anynavs.workers.dev/)
 
 A **static navigation site generator** built with **Node.js**. It reads `config.json` and `links.json`, fills HTML templates under `template/`, and writes output to `dist/` for any static host (GitHub Pages, Cloudflare Pages, Nginx, etc.).
 
