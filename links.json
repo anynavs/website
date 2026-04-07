@@ -28,6 +28,18 @@
                 "description": "哔哩哔哩"
             },
             {
+                "name": "备用站1",
+                "url": "https://anynavs.netlify.app/",
+                "domain": "anynavs.netlify.app",
+                "description": "netlify 备用站1"
+            },
+            {
+                "name": "备用站2",
+                "url": "https://anynavs.github.io/website/",
+                "domain": "anynavs.github.io",
+                "description": "github 备用站2"
+            },
+            {
                 "name": "Pinterest",
                 "url": "https://www.pinterest.com",
                 "domain": "www.pinterest.com",

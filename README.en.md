@@ -2,6 +2,8 @@
 
 **Language:** English · [中文](README.md)
 
+**Live site (GitHub Pages):** [https://anynavs.github.io/website/](https://anynavs.github.io/website/)
+
 A **static navigation site generator** built with [Bun](https://bun.sh). It reads `config.json` and `links.json`, fills HTML templates under `template/`, and writes output to `dist/` for any static host (GitHub Pages, Cloudflare Pages, Nginx, etc.).
 
 ## Features
@@ -58,7 +60,7 @@ Top level is an array of categories. Each item looks like:
 
 ## Quick deploy
 
-Replace `OWNER` in the URLs below with your GitHub user or org (the repo must be on GitHub).
+One-click deploy defaults to this repo [`anynavs/website`](https://github.com/anynavs/website). If you fork it, change `user/repo` in the URLs to yours.
 
 The repo root already includes:
 
@@ -67,15 +69,15 @@ The repo root already includes:
 
 ### Vercel (vercel.app)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FOWNER%2Fanynavs&install-command=bun%20install&build-command=bun%20run%20build&output-directory=dist)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fanynavs%2Fwebsite&install-command=bun%20install&build-command=bun%20run%20build&output-directory=dist)
 
-- Same URL: `https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FOWNER%2Fanynavs&install-command=bun%20install&build-command=bun%20run%20build&output-directory=dist`
+- Same URL: `https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fanynavs%2Fwebsite&install-command=bun%20install&build-command=bun%20run%20build&output-directory=dist`
 
 ### Netlify (netlify.app)
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/OWNER/anynavs)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/anynavs/website)
 
-- Same URL: `https://app.netlify.com/start/deploy?repository=https://github.com/OWNER/anynavs`
+- Same URL: `https://app.netlify.com/start/deploy?repository=https://github.com/anynavs/website`
 
 ### Cloudflare Pages (`*.pages.dev` / custom domain)
 

@@ -41,6 +41,8 @@ interface Config {
   twitter_card: string;
   /** 可省略或 []；无条目时不渲染友情链接区块 */
   friendly_links?: { name: string; url: string; nofollow?: boolean; description?: string }[];
+  /** 可选；首页与关于页顶栏、页脚 GitHub 仓库链接 */
+  github_repo_url?: string;
 }
 
 // ── 工具函数 ──────────────────────────────────────────────
@@ -187,6 +189,18 @@ function friendlyLinksHtml(links: Config["friendly_links"]): string {
         </section>`;
 }
 
+function githubHeaderLinkHtml(config: Config): string {
+  const url = config.github_repo_url?.trim();
+  if (!url) return "";
+  return `<a href="${escapeAttr(url)}" class="text-sub text-slate-400 hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer" title="GitHub 仓库" aria-label="GitHub 仓库"><svg class="icon w-5 h-5"><use href="#i-github"/></svg></a>`;
+}
+
+function githubFooterLinkHtml(config: Config): string {
+  const url = config.github_repo_url?.trim();
+  if (!url) return "";
+  return `<p class="text-xs text-sub text-slate-500 font-light"><a href="${escapeAttr(url)}" class="text-slate-500 hover:text-blue-400 transition-colors underline underline-offset-2" target="_blank" rel="noopener noreferrer">GitHub 仓库</a></p>`;
+}
+
 /** tailwind 配置块（所有页面共用） */
 const TW_COLORS = `"colors": {
                         "primary-container": "#44a5ff",
@@ -321,6 +335,7 @@ function aboutPageHtml(config: Config, categories: Category[], svgSprite: string
             </nav>
         </div>
         <div class="flex items-center gap-5">
+            ${githubHeaderLinkHtml(config)}
             <svg id="theme-toggle" class="icon w-5 h-5 text-sub text-slate-400 hover:text-primary transition-colors cursor-pointer"><use href="#i-dark-mode"/></svg>
         </div>
     </header>
@@ -385,6 +400,7 @@ function aboutPageHtml(config: Config, categories: Category[], svgSprite: string
     </main>
     <footer class="footer-bg w-full py-12 bg-[#0c0e12] flex flex-col items-center gap-4 border-t border-subtle border-slate-800/30 mt-auto">
         <p class="text-xs text-sub text-slate-500 font-light">${escapeHtml(config.footer_copyright)}</p>
+        ${githubFooterLinkHtml(config)}
     </footer>
 </div>
 <script>
@@ -482,6 +498,8 @@ async function main() {
     "{{categories}}": categoriesHtml,
     "{{sidenav}}": sidenavHtml,
     "{{friendly_links}}": friendlyLinksHtml_,
+    "{{github_header}}": githubHeaderLinkHtml(config),
+    "{{github_footer}}": githubFooterLinkHtml(config),
   });
 
   // 替换 redirect.html

@@ -2,6 +2,8 @@
 
 **语言：** [English](README.en.md) · 中文
 
+**在线站点（GitHub Pages）：** [https://anynavs.github.io/website/](https://anynavs.github.io/website/)
+
 用 [Bun](https://bun.sh) 写的**静态导航站生成器**：读 `config.json` 与 `links.json`，套 `template/` 里的 HTML，输出到 `dist/`，可直接丢到任意静态托管（GitHub Pages、Cloudflare Pages、Nginx 等）。
 
 ## 功能概览
@@ -58,7 +60,7 @@ bun run dev      # 本地起静态服务，默认 http://localhost:3366 ，读 d
 
 ## 快速部署
 
-把下面链接里的 `OWNER` 换成你的 GitHub 用户名或组织名（仓库需已推到 GitHub）。
+一键部署默认指向本仓库 [`anynavs/website`](https://github.com/anynavs/website)；若 fork 到自己的账号，把 URL 里的 `用户名/仓库名` 改成你的即可。
 
 仓库根目录已含：
 
@@ -67,15 +69,15 @@ bun run dev      # 本地起静态服务，默认 http://localhost:3366 ，读 d
 
 ### Vercel（vercel.app）
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FOWNER%2Fanynavs&install-command=bun%20install&build-command=bun%20run%20build&output-directory=dist)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fanynavs%2Fwebsite&install-command=bun%20install&build-command=bun%20run%20build&output-directory=dist)
 
-- 链接（同上）：`https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FOWNER%2Fanynavs&install-command=bun%20install&build-command=bun%20run%20build&output-directory=dist`
+- 链接（同上）：`https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fanynavs%2Fwebsite&install-command=bun%20install&build-command=bun%20run%20build&output-directory=dist`
 
 ### Netlify（netlify.app）
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/OWNER/anynavs)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/anynavs/website)
 
-- 链接（同上）：`https://app.netlify.com/start/deploy?repository=https://github.com/OWNER/anynavs`
+- 链接（同上）：`https://app.netlify.com/start/deploy?repository=https://github.com/anynavs/website`
 
 ### Cloudflare Pages（`*.pages.dev` / 自定义域）
 
