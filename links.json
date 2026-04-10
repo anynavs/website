@@ -63,6 +63,13 @@
                 "description": "render 备用站5"
             },
             {
+                "name": "备用站6",
+                "url": "https://anynavs.pages.dev/",
+                "dofollow": true,
+                "domain": "anynavs.pages.dev",
+                "description": "pages 备用站6"
+            },
+            {
                 "name": "Pinterest",
                 "url": "https://www.pinterest.com",
                 "domain": "www.pinterest.com",

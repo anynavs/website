@@ -7,6 +7,7 @@
 - [GitHub Pages](https://anynavs.github.io/website/)
 - [Netlify](https://anynavs.netlify.app/)
 - [Cloudflare Workers](https://website.anynavs.workers.dev/)
+- [Cloudflare Pages](https://anynavs.pages.dev/)
 - [GitLab Pages](https://website-a685e6.gitlab.io/)
 - [Render](https://website-rqu5.onrender.com)
 

@@ -1,10 +1,15 @@
 # Workers：`npx wrangler deploy` 上传静态资源（构建产物 dist/）
 # https://developers.cloudflare.com/workers/static-assets/binding/
 #
-# Cloudflare Pages（Git 连接）：在控制台填「构建输出目录」为 dist，或 CLI：`npx wrangler pages deploy dist`
+# Cloudflare Pages：本文件含 `pages_build_output_dir` 后作为 Pages 配置源（需 V2 build system + wrangler ≥3.45）
+# Git 连接时在控制台设 Build command：`npm run build`；Node 建议 20+（与 package.json engines 一致）
+# CLI：`npx wrangler pages deploy dist` 或带本仓库 wrangler 配置部署
 # https://developers.cloudflare.com/pages/functions/wrangler-configuration/
 name = "anynavs"
 compatibility_date = "2026-04-07"
+
+# Pages 构建输出目录（与 `npm run build` → `tsx index.ts` 产物一致）
+pages_build_output_dir = "./dist"
 
 [assets]
 directory = "./dist"
