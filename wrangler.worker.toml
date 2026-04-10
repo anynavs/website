@@ -1,0 +1,8 @@
+# 仅 Cloudflare Workers（静态资源）：不要用此文件作为 Pages 的 wrangler
+# `npx wrangler deploy --config wrangler.worker.toml`
+# https://developers.cloudflare.com/workers/static-assets/binding/
+name = "anynavs"
+compatibility_date = "2026-04-07"
+
+[assets]
+directory = "./dist"
