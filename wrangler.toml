@@ -5,7 +5,7 @@
 # Git 连接时在控制台设 Build command：`npm run build`；Node 建议 20+（与 package.json engines 一致）
 # CLI：`npx wrangler pages deploy dist` 或带本仓库 wrangler 配置部署
 # https://developers.cloudflare.com/pages/functions/wrangler-configuration/
-name = "anynavs"
+name = "website"
 compatibility_date = "2026-04-07"
 
 # Pages 构建输出目录（与 `npm run build` → `tsx index.ts` 产物一致）
