@@ -7,7 +7,8 @@
   },
   "scripts": {
     "dev": "tsx index.ts && tsx serve.ts",
-    "build": "tsx index.ts"
+    "build": "tsx index.ts",
+    "deploy:worker": "npx wrangler deploy --config wrangler.worker.toml"
   },
   "devDependencies": {
     "@types/node": "^22.13.10",

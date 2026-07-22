@@ -3,8 +3,9 @@
 # CLI：`npx wrangler pages deploy dist`
 # https://developers.cloudflare.com/pages/functions/wrangler-configuration/
 #
-# 若仍用 Workers 部署静态资源，见 `wrangler.worker.toml`：
-# `npx wrangler deploy --config wrangler.worker.toml`
+# Workers 静态资源：根目录 `wrangler.toml` 不能含 `[assets]`（Pages 会报错）。
+# Pages 控制台「Deploy command」勿写 `wrangler deploy`（会读本文件且无入口）；
+# 应写：`npx wrangler deploy --config wrangler.worker.toml` 或 `npm run deploy:worker`
 name = "anynavs"
 compatibility_date = "2026-04-07"
 
