@@ -46,21 +46,24 @@ interface Config {
   /** 可选；首页与关于页顶栏、页脚 GitHub 仓库链接 */
   github_repo_url?: string;
   /**
-   * 子路径前缀（无前导以外的尾部斜杠），如 GitLab 项目页 `https://ns.gitlab.io/foo/` 填 `/foo`。
-   * 也可用环境变量 BASE_PATH（CI 里已用 CI_PROJECT_NAME 自动设置）。
+   * 子路径前缀，如 GitHub 项目页 `https://user.github.io/website/` 填 `/website`。
+   * 优先读环境变量 BASE_PATH（GitHub Pages workflow 会按仓库名自动设置）；
+   * workers.dev / pages.dev 等根路径部署保持为空。
    */
   base_path?: string;
 }
 
 // ── 工具函数 ──────────────────────────────────────────────
 
-/** 优先读 BASE_PATH，否则 config.base_path；空表示站点在域名根路径 */
+/** 优先读 BASE_PATH，否则 config.base_path；空表示站点在域名根路径。归一化为 `/foo`（无尾斜杠） */
 function basePathPrefix(config: Config): string {
   const env = process.env.BASE_PATH?.trim();
   const raw =
     env !== undefined && env !== "" ? env : (config.base_path ?? "").trim();
-  if (!raw) return "";
-  return raw.replace(/\/+$/, "") || "";
+  if (!raw || raw === "/") return "";
+  const noTrail = raw.replace(/\/+$/, "");
+  if (!noTrail || noTrail === "/") return "";
+  return noTrail.startsWith("/") ? noTrail : `/${noTrail}`;
 }
 
 /** 根相对路径加前缀，path 须以 / 开头 */
@@ -110,17 +113,17 @@ function linkCard(item: LinkItem, config: Config): string {
   const escapedHref = escapeAttr(href);
   const favicon = faviconUrl(item.domain);
 
-  return `<a href="${escapedHref}" target="_blank" rel="noopener noreferrer" class="link-card-wrap group bg-surface-container rounded-xl p-4 transition-all hover:bg-surface-container-high hover:translate-y-[-2px] border border-outline-variant/5">
+  return `<a href="${escapedHref}" target="_blank" rel="noopener noreferrer" class="link-card-wrap group card-bg bg-surface-container rounded-xl p-4 transition-all hover:bg-surface-container-high hover:translate-y-[-2px] border border-subtle border-outline-variant/5">
                 <div class="link-card" data-name="${escapeAttr(item.name)}" data-desc="${escapeAttr(item.description)}">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center overflow-hidden group-hover:shadow-[0_0_15px_rgba(106,178,255,0.2)] transition-shadow shrink-0">
+                        <div class="icon-bg w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center overflow-hidden group-hover:shadow-[0_0_15px_rgba(106,178,255,0.2)] transition-shadow shrink-0">
                             <img src="${favicon}" alt="" class="w-5 h-5" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
                         </div>
                         <div class="flex-1 min-w-0">
-                            <h3 class="text-base font-bold text-on-surface truncate">${escapedName}</h3>
-                            <p class="text-xs text-on-surface-variant truncate">${escapedDesc}</p>
+                            <h3 class="text-base font-bold text-main text-on-surface truncate">${escapedName}</h3>
+                            <p class="text-xs text-sub text-on-surface-variant truncate">${escapedDesc}</p>
                         </div>
-                        <svg class="icon w-4 h-4 text-outline-variant group-hover:text-on-surface transition-colors"><use href="#i-open-new"/></svg>
+                        <svg class="icon w-4 h-4 text-muted text-outline-variant group-hover:text-on-surface transition-colors"><use href="#i-open-new"/></svg>
                     </div>
                 </div>
             </a>`;
@@ -135,7 +138,7 @@ function flatCategory(cat: Category, config: Config): string {
   return `
         <section class="category-section mb-14" id="cat-${encodeURIComponent(cat.name)}">
             <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold tracking-tight text-on-surface flex items-center gap-2">
+                <h2 class="text-xl font-bold tracking-tight text-main text-on-surface flex items-center gap-2">
                     <span class="w-1.5 h-6 bg-primary rounded-full"></span>
                     ${escapedName}
                 </h2>
@@ -170,7 +173,7 @@ function tabCategory(cat: Category, config: Config): string {
   return `
         <section class="category-section mb-14 tab-group" id="cat-${encodeURIComponent(cat.name)}">
             <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold tracking-tight text-on-surface flex items-center gap-2">
+                <h2 class="text-xl font-bold tracking-tight text-main text-on-surface flex items-center gap-2">
                     <span class="w-1.5 h-6 bg-tertiary rounded-full"></span>
                     ${escapedCatName}
                 </h2>
@@ -211,7 +214,7 @@ function friendlyLinksHtml(links: Config["friendly_links"]): string {
 
   return `
         <section class="mt-16 pt-12 border-t border-outline-variant/10">
-            <h2 class="text-sm font-bold tracking-widest uppercase text-on-surface-variant mb-6 text-center">友情链接</h2>
+            <h2 class="text-sm font-bold tracking-widest uppercase text-sub text-on-surface-variant mb-6 text-center">友情链接</h2>
             <div class="flex flex-wrap justify-center gap-x-8 gap-y-4">
                 ${items}
             </div>
@@ -229,6 +232,90 @@ function githubFooterLinkHtml(config: Config): string {
   if (!url) return "";
   return `<p class="text-xs text-sub text-slate-500 font-light"><a href="${escapeAttr(url)}" class="text-slate-500 hover:text-blue-400 transition-colors underline underline-offset-2" target="_blank" rel="noopener noreferrer">GitHub 仓库</a></p>`;
 }
+
+/** 浅色主题：覆盖 design tokens + 硬编码暗色，避免白字/黑卡片 */
+const LIGHT_THEME_CSS = `
+        /* 亮色模式 */
+        html:not(.dark) body { background-color: #f4f5f8; color: #1a1c20; }
+        html:not(.dark) .bg-background,
+        html:not(.dark) .bg-surface,
+        html:not(.dark) .bg-surface-dim { background-color: #f4f5f8 !important; }
+        html:not(.dark) .bg-surface-container-lowest { background-color: #ffffff !important; }
+        html:not(.dark) .bg-surface-container-low,
+        html:not(.dark) .surface-low-bg { background-color: #e9eaef !important; }
+        html:not(.dark) .bg-surface-container,
+        html:not(.dark) .card-bg { background-color: #ffffff !important; }
+        html:not(.dark) .bg-surface-container-high,
+        html:not(.dark) .icon-bg { background-color: #e4e5ea !important; }
+        html:not(.dark) .hover\\:bg-surface-container-high:hover { background-color: #eef0f4 !important; }
+        html:not(.dark) .bg-surface-container-highest,
+        html:not(.dark) .bg-surface-variant,
+        html:not(.dark) .hover\\:bg-surface-container-highest:hover { background-color: #e2e3e8 !important; }
+        html:not(.dark) .bg-surface-bright { background-color: #ffffff !important; }
+        html:not(.dark) .card-bg:hover { background-color: #eef0f4; }
+
+        html:not(.dark) .text-on-surface,
+        html:not(.dark) .text-on-background,
+        html:not(.dark) .text-main,
+        html:not(.dark) .text-slate-100 { color: #1a1c20 !important; }
+        html:not(.dark) .text-on-surface-variant,
+        html:not(.dark) .text-sub { color: #53555a !important; }
+        html:not(.dark) .text-muted,
+        html:not(.dark) .text-outline,
+        html:not(.dark) .text-slate-400,
+        html:not(.dark) .text-slate-500 { color: #6b6d73 !important; }
+        html:not(.dark) .text-outline-variant { color: #8a8b90 !important; }
+        html:not(.dark) .group:hover .group-hover\\:text-on-surface { color: #1a1c20 !important; }
+        html:not(.dark) .placeholder\\:text-on-surface-variant\\/50::placeholder { color: rgba(83, 85, 90, 0.55) !important; }
+        html:not(.dark) .text-on-surface-variant\\/30 { color: rgba(83, 85, 90, 0.35) !important; }
+
+        html:not(.dark) .text-primary,
+        html:not(.dark) .text-accent { color: #0062a5 !important; }
+        html:not(.dark) .text-blue-400 { color: #1d6fd4 !important; }
+        html:not(.dark) .hover\\:text-blue-300:hover,
+        html:not(.dark) .hover\\:text-blue-400:hover,
+        html:not(.dark) .hover\\:text-primary:hover { color: #004c82 !important; }
+        html:not(.dark) .border-blue-400 { border-color: #1d6fd4 !important; }
+        html:not(.dark) .bg-blue-400\\/5 { background-color: rgba(29, 111, 212, 0.08) !important; }
+        html:not(.dark) .bg-primary { background-color: #0062a5 !important; }
+        html:not(.dark) .text-tertiary { color: #7b2fbf !important; }
+        html:not(.dark) .bg-tertiary\\/10 { background-color: rgba(123, 47, 191, 0.1) !important; }
+        html:not(.dark) .bg-primary\\/10 { background-color: rgba(0, 98, 165, 0.1) !important; }
+        html:not(.dark) .border-primary\\/20 { border-color: rgba(0, 98, 165, 0.25) !important; }
+        html:not(.dark) .border-primary\\/30 { border-color: rgba(0, 98, 165, 0.35) !important; }
+        html:not(.dark) .border-primary\\/40 { border-color: rgba(0, 98, 165, 0.4) !important; }
+        html:not(.dark) .ring-primary\\/20 { --tw-ring-color: rgba(0, 98, 165, 0.2) !important; }
+
+        html:not(.dark) .border-outline-variant\\/5,
+        html:not(.dark) .border-outline-variant\\/10,
+        html:not(.dark) .border-outline-variant\\/20,
+        html:not(.dark) .border-subtle { border-color: #d0d1d6 !important; }
+        html:not(.dark) .border-slate-800\\/30 { border-color: #d0d1d6 !important; }
+
+        html:not(.dark) .sidebar-bg,
+        html:not(.dark) .bg-\\[\\#111318\\] { background-color: #e8e9ed !important; }
+        html:not(.dark) .header-bg,
+        html:not(.dark) .bg-\\[\\#0c0e12\\]\\/60 {
+            background-color: rgba(244, 245, 248, 0.88) !important;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06) !important;
+        }
+        html:not(.dark) .footer-bg,
+        html:not(.dark) .bg-\\[\\#0c0e12\\] {
+            background-color: #e8e9ed !important;
+            border-color: #d0d1d6 !important;
+        }
+        html:not(.dark) .hover\\:bg-slate-800\\/50:hover { background-color: rgba(0, 0, 0, 0.05) !important; }
+        html:not(.dark) .shadow-black\\/50 { --tw-shadow-color: rgba(0, 0, 0, 0.08) !important; }
+        html:not(.dark) .link-card-wrap {
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
+        }
+        html:not(.dark) .link-card-wrap:hover {
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+        }
+        html:not(.dark) .group:hover .group-hover\\:shadow-\\[0_0_15px_rgba\\(106\\,178\\,255\\,0\\.2\\)\\] {
+            box-shadow: 0 0 0 1px rgba(0, 98, 165, 0.15) !important;
+        }
+`;
 
 /** tailwind 配置块（所有页面共用） */
 const TW_COLORS = `"colors": {
@@ -321,16 +408,7 @@ function aboutPageHtml(config: Config, categories: Category[], svgSprite: string
     <style>
         body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
         .icon { width: 1em; height: 1em; display: inline-block; vertical-align: middle; flex-shrink: 0; }
-        html:not(.dark) body { background-color: #f5f5f9; color: #1a1c20; }
-        html:not(.dark) .sidebar-bg { background-color: #e8e9ed; }
-        html:not(.dark) .header-bg { background-color: rgba(245, 245, 249, 0.8); }
-        html:not(.dark) .surface-low-bg { background-color: #e2e3e8; }
-        html:not(.dark) .text-main { color: #1a1c20; }
-        html:not(.dark) .text-sub { color: #53555a; }
-        html:not(.dark) .text-muted { color: #74757a; }
-        html:not(.dark) .text-accent { color: #0062a5; }
-        html:not(.dark) .border-subtle { border-color: #d0d1d6; }
-        html:not(.dark) .footer-bg { background-color: #e8e9ed; border-color: #d0d1d6; }
+${LIGHT_THEME_CSS}
     </style>
 </head>
 <body class="bg-background text-on-surface selection:bg-primary/30 min-h-screen flex">
@@ -535,6 +613,7 @@ async function main() {
     "{{friendly_links}}": friendlyLinksHtml_,
     "{{github_header}}": githubHeaderLinkHtml(config),
     "{{github_footer}}": githubFooterLinkHtml(config),
+    "{{light_theme_css}}": LIGHT_THEME_CSS,
   });
 
   // 替换 redirect.html

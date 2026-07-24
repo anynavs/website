@@ -42,6 +42,6 @@ createServer(async (req, res) => {
     res.writeHead(404);
     res.end("Not Found");
   }
-}).listen(3366, () => {
-  console.log("http://localhost:3366");
+}).listen(23366, () => {
+  console.log("http://localhost:23366");
 });

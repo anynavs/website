@@ -1,4 +1,7 @@
-# 将 dist/ 部署到 GitHub Pages（适用于仓库名为 username.github.io 时的 https://username.github.io）
+# 部署 dist/ 到 GitHub Pages
+# - 用户/组织站（仓库名 = <owner>.github.io）→ 根路径，BASE_PATH 为空
+# - 项目站（如 anynavs/website → https://anynavs.github.io/website/）→ BASE_PATH=/<repo>
+# workers.dev / pages.dev / Vercel / Netlify 等根路径部署不要设 BASE_PATH
 name: Deploy GitHub Pages
 
 on:
@@ -26,6 +29,18 @@ jobs:
                   cache: npm
 
             - run: npm ci
+
+            - name: Set BASE_PATH for project pages
+              run: |
+                  OWNER="${{ github.repository_owner }}"
+                  REPO="${{ github.event.repository.name }}"
+                  if [ "$REPO" = "${OWNER}.github.io" ]; then
+                    echo "BASE_PATH=" >> "$GITHUB_ENV"
+                    echo "User/org pages → BASE_PATH empty"
+                  else
+                    echo "BASE_PATH=/${REPO}" >> "$GITHUB_ENV"
+                    echo "Project pages → BASE_PATH=/${REPO}"
+                  fi
 
             - run: npm run build
 
